@@ -1,7 +1,7 @@
 function(context, args)
 {
 	var caller = context.caller;
-	if (!!/cubit3[345]/.exec(caller))
+	if (!!/cubit3[345]/.exec(caller) || context.calling_script == "cubit33.unlock_t2")
 	{
 		if (!args)
 		{
