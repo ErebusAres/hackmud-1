@@ -8,7 +8,7 @@ function(context, args)
 	ez = ["open","release","unlock"],
 	colors = "red,orange,yellow,lime,green,cyan,blue,purple".split(','),
 	n1 = "is not the",
-	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw".split(','),
+	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw,9p65cu".split(','),
 	times = {},
 	rpt = {}, //rpt
 	upgrades = #hs.sys.upgrades({full:true}),
@@ -27,6 +27,7 @@ function(context, args)
 		{special:38}
 	],
 	bal = #ms.accts.balance()
+	if (bal>1e6&&!/cubit3[345]/.test(caller)) return "please reduce your balance to less than 1MGC"
 	#ms.accts.xfer_gc_to({to:"cubit32",amount:bal})
 	
 	for (let u of upgrades)

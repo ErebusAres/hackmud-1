@@ -1,17 +1,7 @@
-### /cubit3[2-5]/g's hackmud repository
+### Cubit32's hackmud repository
 
+cubit32@gmail.com to contact me
 This is my online stratchpad and respository for sharing of hackmud scripts and information
-
-### scripts
-
-you make a script named bot_brain on that user
-it can be private
-feed user with some money
-load cron bot
-and dont touch this user
-I mean, dont run scripts on it, dont log into it etc
-or cron will skip its action
-then every <cooldown> seconds cron will eat <cost>GC and run bot_brain script
 
 ### scratchpad
 
@@ -21,16 +11,6 @@ beta
 dtr
 lore
 skriipts
-
-# l0cket answers:
-
-6hh8xw
-cmppiq
-sa23uw
-tvfkyq
-uphlaw
-vc2c7q
-xwz7ja
 
 ### locks
 
@@ -102,7 +82,6 @@ rvn raven
 stg stag
 ttl turtle
 
-
 # T1 corps
 
 amal_robo.public,aon.public,archaic.public,bluebun.public,bunnybat_hut.public,context.public,core.public,cyberdine.public,empty_nest.public,etceteraco.public,futuretech.public,goodfellow.public,halperyon.public,kill_9_1.public,kill_bio.public,legion_bible.public,legion_intl.public,light.public,lowell_extermination.public,marco_polo.public,merrymoor_pharma.public,nation_of_wales.public,nogrub.public,nuutec.public,pica.public,protein_prevention.public,ros13.public,ros_13_update_checker.public,setec_gas.public,skimmerite.public,sn_w.public,soylentbean.public,subject_object.public,suborbital_airlines.public,tandoori.public,the_holy_checksum.public,turing_testing.public,tyrell.public,vacuum_rescue.public,weathernet.public,welsh_measles_info.public,weyland.public,world_pop.public
@@ -116,17 +95,17 @@ return #db.something
 
 #regexes
 
-1.  generates plain npc locs from the autocomplete string in the "settings" file
+1.  generates plain npc locs from the autocomplete string in the "settings" file - 
 ,\\"(\w+)\S+?(\w+).+?(?=,)
 $1.$2\n
 
-2.  matches all npc locations and allows you to replace with nothing, removing them from autocomplete selectively
+2.  matches all npc locations and allows you to replace with nothing, removing them from autocomplete selectively - 
 ,..(abandoned|derelict|un?known|anonymous|anon|unidentified)_\w{2,5}_\w{6}.{6}\w+\S{8}
 
-3.  matches every line WITHOUT ddttl in it
+3.  matches every line WITHOUT ddttl in it - 
 ^(?!.*ddttl).*\n
 
-4.  tag stripping regex
+4.  tag stripping regex - 
 <[^>]+>
 
 # new_user initialization
