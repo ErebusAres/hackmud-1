@@ -163,7 +163,7 @@ function(context, args)
 								if (!/(total (spent|earned)|What was th)/.test(rsp))
 								{
 									//#D({success:"acct_nt"})
-									report["acct_nt"] = {count:count}
+									report["acct_nt"] = {count,guesses,ts}
 									error=false, end=true
 									break
 								}
@@ -176,7 +176,7 @@ function(context, args)
 						if (count > notTxMid.length)
 						{
 							report["error"] = "could not find the correct amount for `Nacct_nt`"
-							report["acct_nt"] = {guesses:guesses}
+							report["acct_nt"] = {guesses,ts,newNotMid}
 							//#D({error:"acct_nt",midsum:midSum,count:count,rsp:rsp})
 							//#D(guesses)
 							break
