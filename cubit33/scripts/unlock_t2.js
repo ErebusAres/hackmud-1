@@ -149,20 +149,21 @@ function(context, args)
 					while (Date.now()-_START<4500)
 					{
 						sum = midSum
-						if (txHead) sum += txHead.slice(count%(txHead.length+1))								  .reduce((a,o) => { return a + o.amount }, 0)
-						if (txTail) sum += txTail.reverse().slice(Math.floor(count/txTail.length)).reduce((a,o) => { return a + o.amount }, 0)
+						let txHMod = count%(txHead.length+1), txTMod = Math.floor(count/txTail.length)
+						if (txHead) sum += txHead.slice(txHMod)					 .reduce((a,o) => { return a + o.amount }, 0)
+						if (txTail) sum += txTail.reverse().slice(txTMod).reduce((a,o) => { return a + o.amount }, 0)
 						if (!/What was/.test(rsp)) sum = Math.abs(sum)
 						if (guesses.indexOf(sum) == -1)
 						{
 							guesses.push(sum)
 							kv["acct_nt"] = sum
 							rspC()
-							#D({c:count,h:count%(txHead.length+1),t:Math.floor(count/txTail.length),query:kv["acct_nt"],ms:Date.now()-_START})
+							#D({c:count,h:txs.indexOf(txHead[txHMod]),t:txs.indexOf(txTail[txTMod]),query:kv["acct_nt"],ms:Date.now()-_START})
 							// #D({s:sum,c:count,rsp:rsp.substr(-25,25),time:Date.now()-_START})
 							if (!/(total (spent|earned)|What was th)/.test(rsp))
 							{
 								#D({success:"acct_nt"})
-								report["acct_nt"] = {count:count,h:count%(txHead.length+1),t:Math.floor(count/txTail.length)}
+								report["acct_nt"] = {count:count,h:txHMod,t:txTMod}
 								error=false
 								break
 							}
