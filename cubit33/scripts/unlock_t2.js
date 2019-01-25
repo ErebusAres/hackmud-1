@@ -127,7 +127,6 @@ function(context, args)
 							}
 						} 
 					}
-					
 				}
 				else
 				{
@@ -136,46 +135,50 @@ function(context, args)
 					ts[2] = parseInt(ts[2].replace(".",""));
 					if (!/ net `/.test(rsp)){/without/.test(rsp)?txs.filter(e=>!e.memo):txs.filter(e=>e.memo)} //remove transactions with or without memos if no net GC is asked
 					
-					let txTail=[], txMid = [], txHead=[]
+					let notTxMid=[], txMid = [], txLeadLen = 0
 					txs.forEach(e => {
-						if(e.time==ts[1])txTail.push(e)
-						else if(e.time>ts[1] && e.time<ts[2])txMid.push(e)
-						else if(e.time==ts[2])txHead.push(e)
+						if (e.time==ts[2])txLeadLen++
+						if(e.time==ts[1] || e.time==ts[2]){notTxMid.push(e)}
+						else if (e.time>ts[1] && e.time<ts[2]){txMid.push(e)}
 					})
-
+					//#D({ntxm:notTxMid.length,t1:ts[1],t2:ts[2],txLeadLen:txLeadLen})
+					
 					let midSum = 0; for (let i of txMid) midSum+=i.amount
-					let count = 0, sum=0, guesses = [], error=true
-
+					let count = 0, count2 = 0, guesses = [], error=true
 					while (Date.now()-_START<4500)
 					{
-						sum = midSum
-						let txHMod = count%(txHead.length+1), txTMod = Math.floor(count/txTail.length)
-						if (txHead) sum += txHead.slice(txHMod)					 .reduce((a,o) => { return a + o.amount }, 0)
-						if (txTail) sum += txTail.reverse().slice(txTMod).reduce((a,o) => { return a + o.amount }, 0)
-						if (!/What was/.test(rsp)) sum = Math.abs(sum)
-						if (guesses.indexOf(sum) == -1)
+						let sum = midSum, end=false, newNotMid = notTxMid.slice(count);
+						if (newNotMid.length) {sum += newNotMid.reduce((a,o) => { return a + o.amount },0)}
+						
+						while (newNotMid.length-txLeadLen>=0)
 						{
-							guesses.push(sum)
-							kv["acct_nt"] = sum
-							rspC()
-							#D({c:count,h:txs.indexOf(txHead[txHMod]),t:txs.indexOf(txTail[txTMod]),query:kv["acct_nt"],ms:Date.now()-_START})
-							// #D({s:sum,c:count,rsp:rsp.substr(-25,25),time:Date.now()-_START})
-							if (!/(total (spent|earned)|What was th)/.test(rsp))
+							if (!/What was/.test(rsp)) sum = Math.abs(sum)
+							if (guesses.indexOf(sum) == -1)
 							{
-								#D({success:"acct_nt"})
-								report["acct_nt"] = {count:count,h:txHMod,t:txTMod}
-								error=false
-								break
+								guesses.push(sum)
+								kv["acct_nt"] = sum
+								rspC()
+								// #D({c:count,query:kv["acct_nt"],ms:Date.now()-_START})
+								// #D({s:sum,c:count,rsp:rsp.substr(-25,25),time:Date.now()-_START})
+								if (!/(total (spent|earned)|What was th)/.test(rsp))
+								{
+									//#D({success:"acct_nt"})
+									report["acct_nt"] = {count:count}
+									error=false, end=true
+									break
+								}
 							}
+							sum-=newNotMid.pop().amount
 						}
-
+						if (end) break
+						
 						count++
-						if (count>(txHead.length+2)*(txTail.length+2))
+						if (count > notTxMid.length)
 						{
 							report["error"] = "could not find the correct amount for `Nacct_nt`"
 							report["acct_nt"] = {guesses:guesses}
-							#D({error:"acct_nt",midsum:midSum,hLen:txHead.length,tLen:txTail.length,count:count,rsp:rsp,maxCount:(txHead.length+2)*(txTail.length+2)})
-							#D(guesses)
+							//#D({error:"acct_nt",midsum:midSum,count:count,rsp:rsp})
+							//#D(guesses)
 							break
 						}
 					}
