@@ -237,8 +237,8 @@ function(context, args)
 					if (rspI(j))
 					{
 						#hs.cubit32.xfer({amount:i[j]})
+						rspC()
 					}
-					rspC()
 				}}        
 			}
 			else if (lk.includes("EZ_"))
@@ -331,7 +331,7 @@ function(context, args)
 		}
 		else if (rspI("To unlock, please load the appropriate k3y:"))
 		{
-			let reqK3y = /(...)\*+/.exec(rsp)[1]
+			let reqK3y = /(...)...$/.exec(rsp)[1]
 			let error = true
 			for (let i of k3ys)
 			{
