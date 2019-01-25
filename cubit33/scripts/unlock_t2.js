@@ -118,15 +118,15 @@ function(context, args)
 				})
 				kv["acct_nt"] = 0
 				rspC()
-				if (!/spent|earned|What was|withdrawal/.test(rsp))continue
-				let rgx=/withdrawal/
+				if (!/spent|earned|What was|withdrawal|deposit/.test(rsp))continue
+				let rgx=/withdrawal|deposit/
 				
 				if(rgx.test(rsp))
 				{
 					while (txs.length)
 					{
 						let temp = txs.shift()
-						if (temp.recipient == caller)
+						if (temp.recipient == caller && rspI("deposit"))
 						{
 							kv["acct_nt"] = Math.abs(temp.amount)
 							rspC()
@@ -135,7 +135,17 @@ function(context, args)
 								rpt["acct_nt"] = {tx:temp}
 								break
 							}
-						} 
+						}
+						else if (!(temp.recipient == caller) && rspI("withdrawal"))
+						{
+							kv["acct_nt"] = Math.abs(temp.amount)
+							rspC()
+							if (!rgx.test(rsp))
+							{
+								rpt["acct_nt"] = {tx:temp}
+								break
+							}
+						}
 					}
 				}
 				else
@@ -158,9 +168,8 @@ function(context, args)
 					{
 						let sum = midSum, end=false, nNM = nTM.slice(count) //nNM means new not mid
 						if (nNM.length) {sum += nNM.reduce((a,o) => { return a + o.amount },0)}
-						while (nNM.length-tLL>=0)
+						while (nNM.length>=(tLL-count)&&nNM.length)
 						{
-							// #D("\n");#D({nNM,sum})
 							if (gsses.indexOf(sum) == -1)
 							{
 								gsses.push(sum)
@@ -173,6 +182,7 @@ function(context, args)
 									break
 								}
 							}
+							// #D("\n");#D({nNM:nNM.length,sum});
 							sum-=nNM.pop().amount
 						}
 						if (end) break
