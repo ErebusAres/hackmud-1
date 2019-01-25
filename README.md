@@ -1,4 +1,4 @@
-### etcetera
+### /cubit3[2-5]/g's hackmud repository
 
 This is my online stratchpad and respository for sharing of hackmud scripts and information
 
