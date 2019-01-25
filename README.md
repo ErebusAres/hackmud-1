@@ -15,26 +15,12 @@ then every <cooldown> seconds cron will eat <cost>GC and run bot_brain script
 
 ### scratchpad
 
-/dc = disconnect hardline
-/gl  = get level (of script)
-/u1 <> = unlock T1 npc matr1x.t1_buster
-/ul <> = unlock T1 npc with cubit33.unlock_t1
-/s1 <> = scrape T1 corp for npc locs
-/bal = get balance
-/cu = clean upgrades, confirm:true
-/lu = lookup user
-/sf = scripts.fullsec{sector:<>}
-ls.npcs = list npc corps
-cubit33.scraper_t1{target:#s.bluebun.public} s
-rape T1 npc corp
-lore.data_check
-ls.users{user:"whoever"}
-
 utility users, ls.users on these to find out what scripts they offer
 matr1x
 beta
 dtr
 lore
+skriipts
 
 # l0cket answers:
 

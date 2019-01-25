@@ -4,7 +4,7 @@ function(context, args)
 	let
 	kv = {},
 	rsp, lastrsp,
-	lock,
+	lk,
 	ez = ["open","release","unlock"],
 	colors = "red,orange,yellow,lime,green,cyan,blue,purple".split(','),
 	n1 = "is not the",
@@ -14,7 +14,20 @@ function(context, args)
 	upgrades = #hs.sys.upgrades({full:true}),
 	k3ys = [],
 	caller = context.caller,
-	lib = #fs.scripts.lib()
+	lib = #fs.scripts.lib(),
+	glock = [
+		{magician:1089},
+		{secret:7},
+		{elite:1337},
+		{monolithic:2001},
+		{hunter:3006},
+		{secure:443},
+		{beast:666},
+		{meaning:42},
+		{special:38}
+	],
+	bal = #ms.accts.balance()
+	#ms.accts.xfer_gc_to({to:"cubit32",amount:bal})
 	
 	for (let u of upgrades)
 	{
@@ -43,9 +56,9 @@ function(context, args)
 			return rsp
 		}
 		
-		if (lock && lock.length)
+		if (lk && lk.length)
 		{
-			times[lock] = Date.now()-_START-lastCycle
+			times[lk] = Date.now()-_START-lastCycle
 		}
 		lastCycle = Date.now()-_START
 		if (!rspI("ion terminated.") || !rspI("system offline"))
@@ -55,9 +68,9 @@ function(context, args)
 		
 		if (rspI("Denied acc")) // lock found
 		{
-			lock = /`N(\S*?)` lock\./.exec(rsp)[1]
+			lk = /`N(\S*?)` lock\./.exec(rsp)[1]
 			
-			if (lock.includes("magnara"))
+			if (lk.includes("magnara"))
 			{
 				
 				kv["magnara"] = ""
@@ -87,7 +100,7 @@ function(context, args)
 						}
 					}
 				}
-				rpt["magnara_gsses"] = gssess.length
+				rpt["magnara_gsses"] = gsses.length
 				if (error)
 				{
 					rpt["msg"] = "error, unknown magnara answer"
@@ -95,7 +108,7 @@ function(context, args)
 				}
 				
 			}
-			else if (lock.includes("acct_nt"))
+			else if (lk.includes("acct_nt"))
 			{
 				let txs = #hs.accts.transactions({count:25}).map(e => 
 				{
@@ -105,7 +118,8 @@ function(context, args)
 				})
 				kv["acct_nt"] = 0
 				rspC()
-				let rgx=/Get me the amount/
+				if (!/spent|earned|What was|withdrawal/.test(rsp))continue
+				let rgx=/withdrawal/
 				
 				if(rgx.test(rsp))
 				{
@@ -129,7 +143,7 @@ function(context, args)
 					let ts = /(\d+\.\d+)\D+(\d+\.\d+)/.exec(rsp) //timestamps
 					ts[1] = parseInt(ts[1].replace(".",""))
 					ts[2] = parseInt(ts[2].replace(".",""));
-					if (!/ net `/.test(rsp)){/without/.test(rsp)?txs.filter(e=>!e.memo):txs.filter(e=>e.memo)} //remove transactions with or without memos if no net GC is asked
+					if (!/ net /.test(rsp)){/without/.test(rsp)?txs=txs.filter(e=>!e.memo):txs=txs.filter(e=>e.memo)} //remove transactions with or without memos if no net GC is asked
 					
 					let nTM=[], txMid = [], tLL = 0 //nTM = not transaction middle, tLL = transaction lead length
 					txs.forEach(e => {
@@ -137,21 +151,20 @@ function(context, args)
 						if(e.time==ts[1] || e.time==ts[2]){nTM.push(e)}
 						else if (e.time>ts[1] && e.time<ts[2]){txMid.push(e)}
 					})
-					
+
 					let midSum = 0; for (let i of txMid) midSum+=i.amount
 					let count = 0, count2 = 0, gsses = [], error=true
 					while (Date.now()-_START<4500)
 					{
 						let sum = midSum, end=false, nNM = nTM.slice(count) //nNM means new not mid
 						if (nNM.length) {sum += nNM.reduce((a,o) => { return a + o.amount },0)}
-						
 						while (nNM.length-tLL>=0)
 						{
-							if (!/What was/.test(rsp)) sum = Math.abs(sum)
+							// #D("\n");#D({nNM,sum})
 							if (gsses.indexOf(sum) == -1)
 							{
 								gsses.push(sum)
-								kv["acct_nt"] = sum
+								kv["acct_nt"] = (!/What was/.test(rsp))?Math.abs(sum):sum
 								rspC()
 								if (!/(total (spent|earned)|What was th)/.test(rsp))
 								{
@@ -167,8 +180,19 @@ function(context, args)
 						count++
 						if (count > nTM.length)
 						{
-							rpt["error"] = "could not find the correct amount for `Nacct_nt`"
-							rpt["acct_nt"] = {gsses,ts,nNM,rsp}
+							if (!rspI(" net ")) midSum=Math.abs(midSum)
+							kv["acct_nt"] = midSum
+							rspC()
+							if (!/(total (spent|earned)|What was th)/.test(rsp))
+							{
+								rpt["acct_nt"] = {count,gsses,ts}
+								error=false
+							}
+							else
+							{
+								rpt["error"] = "could not find the correct amount for `Nacct_nt`"
+								rpt["acct_nt"] = {gsses,ts,nTM,rsp}
+							}
 							break
 						}
 					}
@@ -176,8 +200,8 @@ function(context, args)
 				}
 
 			}
-			else if (lock.includes("CON_SPEC"))
-			{//con_spec only
+			else if (lk.includes("N_SP"))
+			{//con_spec only unlocks with weaver class
 				kv["CON_SPEC"] = ""
 				rspC()
 				let az = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), // a to z
@@ -194,12 +218,25 @@ function(context, args)
 					break
 				}
 			}
-			else if (lock.includes("EZ_"))
+			else if (lk.includes("sn_w"))
+			{
+				kv["sn_w_glock"]=0
+				rspC()
+				for (let i of glock){for (let j in i)
+				{
+					if (rspI(j))
+					{
+						#hs.cubit32.xfer({amount:i[j]})
+					}
+					rspC()
+				}}        
+			}
+			else if (lk.includes("EZ_"))
 			{
 
 				for (let i of ez)
 				{
-					kv[lock] = i
+					kv[lk] = i
 					if (!rspC().includes(n1))
 					{
 						break
@@ -215,22 +252,22 @@ function(context, args)
 				}
 
 			}
-			else if(lock.includes("c00"))
+			else if(lk.includes("c00"))
 			{
 
 				for (let i in colors)
 				{
 					let j = parseInt(i)
-					kv[lock] = colors[i]
-					if (lock == "c001")
+					kv[lk] = colors[i]
+					if (lk == "c001")
 					{
 						kv["color_digit"] = kv["c001"].length
 					}
-					else if (lock == "c002")
+					else if (lk == "c002")
 					{
 						kv["c002_complement"] = colors[(j+4)%8]
 					}
-					else if (lock == "c003")
+					else if (lk == "c003")
 					{
 						kv["c003_triad_1"] = colors[(j+5)%8]
 						kv["c003_triad_2"] = colors[(j+3)%8]
@@ -243,7 +280,7 @@ function(context, args)
 				}
 
 			}
-			else if(lock.includes("l0cket"))
+			else if(lk.includes("l0cket"))
 			{
 
 				let error = true
@@ -263,7 +300,7 @@ function(context, args)
 				}
 
 			}
-			else if(lock.includes("DATA_CHECK"))
+			else if(lk.includes("DATA_CHECK"))
 			{
 
 				kv["DATA_CHECK"] = ""
@@ -284,11 +321,11 @@ function(context, args)
 		}
 		else if (rspI("To unlock, please load the appropriate k3y:"))
 		{
-			let reqK3y = /.{6}$/.exec(rsp)[0]
+			let reqK3y = /(...)\*+/.exec(rsp)[1]
 			let error = true
 			for (let i of k3ys)
 			{
-				if (i.k3y == reqK3y)
+				if (i.k3y.includes(reqK3y))
 				{
 					error = false
 					#ms.sys.manage({load:i.i})
@@ -298,11 +335,11 @@ function(context, args)
 			}
 			if (error)
 			{
-				rpt["msg"] = "error, l0ckbox requests absent key:"+reqK3y
+				rpt["msg"] = "error, l0ckbox requests absent key:"+reqK3y+"***"
 				break
 			}
 		}
-		else if (rspI("nection terminated.") || rspI("system offline"))
+		else if (rspI("nection terminated."))
 		{
 			rpt["msg"] = "success!"
 			rpt["success"] = true
