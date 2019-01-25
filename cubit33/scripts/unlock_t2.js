@@ -1,7 +1,5 @@
 function(context, args)
 {
-	// var caller = context.caller
-	// var l = #fs.scripts.lib()
 	if (!args) {return "Input a target with target:#s.npc.loc\nreport:true to receive detailed feedback"}
 	let
 	kv = {},
@@ -11,10 +9,8 @@ function(context, args)
 	colors = "red,orange,yellow,lime,green,cyan,blue,purple".split(','),
 	n1 = "is not the",
 	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw".split(','),
-	debug = [],
 	times = {},
 	report = {},
-	l0ckboxK3ys = [],
 	upgrades = #hs.sys.upgrades({full:true}),
 	k3ys = [],
 	caller = context.caller,
@@ -141,7 +137,6 @@ function(context, args)
 						if(e.time==ts[1] || e.time==ts[2]){notTxMid.push(e)}
 						else if (e.time>ts[1] && e.time<ts[2]){txMid.push(e)}
 					})
-					//#D({ntxm:notTxMid.length,t1:ts[1],t2:ts[2],txLeadLen:txLeadLen})
 					
 					let midSum = 0; for (let i of txMid) midSum+=i.amount
 					let count = 0, count2 = 0, guesses = [], error=true
@@ -158,11 +153,8 @@ function(context, args)
 								guesses.push(sum)
 								kv["acct_nt"] = sum
 								rspC()
-								// #D({c:count,query:kv["acct_nt"],ms:Date.now()-_START})
-								// #D({s:sum,c:count,rsp:rsp.substr(-25,25),time:Date.now()-_START})
 								if (!/(total (spent|earned)|What was th)/.test(rsp))
 								{
-									//#D({success:"acct_nt"})
 									report["acct_nt"] = {count,guesses,ts}
 									error=false, end=true
 									break
@@ -176,15 +168,31 @@ function(context, args)
 						if (count > notTxMid.length)
 						{
 							report["error"] = "could not find the correct amount for `Nacct_nt`"
-							report["acct_nt"] = {guesses,ts,newNotMid}
-							//#D({error:"acct_nt",midsum:midSum,count:count,rsp:rsp})
-							//#D(guesses)
+							report["acct_nt"] = {guesses,ts,newNotMid,rsp}
 							break
 						}
 					}
 					if (error) break
 				}
 
+			}
+			else if (lock.includes("CON_SPEC"))
+			{//con_spec only
+				kv["CON_SPEC"] = ""
+				rspC()
+				let az = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), // a to z
+				sq = /\w{3}(?=\n)/.exec(rsp)[0].split("").map(x=>az.indexOf(x)), // sequence
+				nr = [sq[2]-sq[1],sq[1]-sq[0]]
+				kv["CON_SPEC"] = 
+					az[sq[2]+nr[1]]					+ 
+					az[sq[2]+nr[1]  +nr[0]] +
+					az[sq[2]+nr[1]*2+nr[0]]
+				rspC()
+				if (rspI("three letters"))
+				{
+					report["msg"] = "wrong CON_SPEC guess"
+					break
+				}
 			}
 			else if (lock.includes("EZ_"))
 			{
@@ -293,7 +301,6 @@ function(context, args)
 				report["msg"] = "error, l0ckbox requests absent key:"+reqK3y
 				break
 			}
-
 		}
 		else if (rspI("nection terminated.") || rspI("system offline"))
 		{
@@ -301,7 +308,7 @@ function(context, args)
 			report["success"] = true
 			break
 		}
-		else if (rspI(n1)) //a lock argument is wrong, something went wrong in the unlocking process
+		else if (rspI(n1))
 		{
 			report["msg"] = "error, wrong lock argument"
 			break
@@ -311,7 +318,7 @@ function(context, args)
 			report["msg"] = "error, timeout"
 			break
 		}
-		else if (rspI("breached")) //a lock argument is wrong, something went wrong in the unlocking process
+		else if (rspI("breached"))
 		{
 			report["msg"] = "error, target already breached!"
 			break
