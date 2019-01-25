@@ -10,7 +10,7 @@ function(context, args)
 	n1 = "is not the",
 	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw".split(','),
 	times = {},
-	report = {},
+	rpt = {}, //rpt
 	upgrades = #hs.sys.upgrades({full:true}),
 	k3ys = [],
 	caller = context.caller,
@@ -35,7 +35,7 @@ function(context, args)
 	{
 		if (!rsp)
 		{
-			report["msg"] = "error, target does not exist"
+			rpt["msg"] = "error, target does not exist"
 			break
 		}
 		if (rspI("chain your hardline"))
@@ -63,22 +63,22 @@ function(context, args)
 				kv["magnara"] = ""
 				rspC()
 				let last4 = /\b\w+$/.exec(rsp)[0].split(""),
-				guesses = [], guess, error=true
+				gsses = [], gss, error=true // guesses and guess
 				while (Date.now()-_START < 4500)
 				{
 					
 					let last4copy = Array(...last4)
-					guess = []
+					gss = []
 					while (last4copy.length)
 					{
 						let copy = last4copy.splice(Math.floor(Math.random()*last4copy.length),1)
-						guess.push(copy)
+						gss.push(copy)
 					}
-					guess = guess.join("")
-					if (guesses.indexOf(guess) == -1)
+					gss = gss.join("")
+					if (gsses.indexOf(gss) == -1)
 					{
-						guesses.push(guess)
-						kv["magnara"] = guess
+						gsses.push(gss)
+						kv["magnara"] = gss
 						rspC()
 						if (!rspI("recinroct magnara ulotno"))
 						{
@@ -87,10 +87,10 @@ function(context, args)
 						}
 					}
 				}
-				report["magnara_guesses"] = guessess.length
+				rpt["magnara_gsses"] = gssess.length
 				if (error)
 				{
-					report["msg"] = "error, unknown magnara answer"
+					rpt["msg"] = "error, unknown magnara answer"
 					break
 				}
 				
@@ -118,7 +118,7 @@ function(context, args)
 							rspC()
 							if (!rgx.test(rsp))
 							{
-								report["acct_nt"] = {tx:temp}
+								rpt["acct_nt"] = {tx:temp}
 								break
 							}
 						} 
@@ -131,44 +131,44 @@ function(context, args)
 					ts[2] = parseInt(ts[2].replace(".",""));
 					if (!/ net `/.test(rsp)){/without/.test(rsp)?txs.filter(e=>!e.memo):txs.filter(e=>e.memo)} //remove transactions with or without memos if no net GC is asked
 					
-					let notTxMid=[], txMid = [], txLeadLen = 0
+					let nTM=[], txMid = [], tLL = 0 //nTM = not transaction middle, tLL = transaction lead length
 					txs.forEach(e => {
-						if (e.time==ts[2])txLeadLen++
-						if(e.time==ts[1] || e.time==ts[2]){notTxMid.push(e)}
+						if (e.time==ts[2])tLL++
+						if(e.time==ts[1] || e.time==ts[2]){nTM.push(e)}
 						else if (e.time>ts[1] && e.time<ts[2]){txMid.push(e)}
 					})
 					
 					let midSum = 0; for (let i of txMid) midSum+=i.amount
-					let count = 0, count2 = 0, guesses = [], error=true
+					let count = 0, count2 = 0, gsses = [], error=true
 					while (Date.now()-_START<4500)
 					{
-						let sum = midSum, end=false, newNotMid = notTxMid.slice(count);
-						if (newNotMid.length) {sum += newNotMid.reduce((a,o) => { return a + o.amount },0)}
+						let sum = midSum, end=false, nNM = nTM.slice(count) //nNM means new not mid
+						if (nNM.length) {sum += nNM.reduce((a,o) => { return a + o.amount },0)}
 						
-						while (newNotMid.length-txLeadLen>=0)
+						while (nNM.length-tLL>=0)
 						{
 							if (!/What was/.test(rsp)) sum = Math.abs(sum)
-							if (guesses.indexOf(sum) == -1)
+							if (gsses.indexOf(sum) == -1)
 							{
-								guesses.push(sum)
+								gsses.push(sum)
 								kv["acct_nt"] = sum
 								rspC()
 								if (!/(total (spent|earned)|What was th)/.test(rsp))
 								{
-									report["acct_nt"] = {count,guesses,ts}
+									rpt["acct_nt"] = {count,gsses,ts}
 									error=false, end=true
 									break
 								}
 							}
-							sum-=newNotMid.pop().amount
+							sum-=nNM.pop().amount
 						}
 						if (end) break
 						
 						count++
-						if (count > notTxMid.length)
+						if (count > nTM.length)
 						{
-							report["error"] = "could not find the correct amount for `Nacct_nt`"
-							report["acct_nt"] = {guesses,ts,newNotMid,rsp}
+							rpt["error"] = "could not find the correct amount for `Nacct_nt`"
+							rpt["acct_nt"] = {gsses,ts,nNM,rsp}
 							break
 						}
 					}
@@ -190,7 +190,7 @@ function(context, args)
 				rspC()
 				if (rspI("three letters"))
 				{
-					report["msg"] = "wrong CON_SPEC guess"
+					rpt["msg"] = "wrong CON_SPEC guess"
 					break
 				}
 			}
@@ -258,7 +258,7 @@ function(context, args)
 				}
 				if (error)
 				{
-					report["msg"] = "error, unknown lock argument"
+					rpt["msg"] = "error, unknown lock argument"
 					break
 				}
 
@@ -270,7 +270,7 @@ function(context, args)
 				let data_check = rspC().split("\n")
 				if (data_check.length != 3)
 				{
-					report["msg"] = "error, DATA_CHECK error, less then 3 questions"
+					rpt["msg"] = "error, DATA_CHECK error, less then 3 questions"
 					break
 				}
 				let string = "";
@@ -298,46 +298,46 @@ function(context, args)
 			}
 			if (error)
 			{
-				report["msg"] = "error, l0ckbox requests absent key:"+reqK3y
+				rpt["msg"] = "error, l0ckbox requests absent key:"+reqK3y
 				break
 			}
 		}
 		else if (rspI("nection terminated.") || rspI("system offline"))
 		{
-			report["msg"] = "success!"
-			report["success"] = true
+			rpt["msg"] = "success!"
+			rpt["success"] = true
 			break
 		}
 		else if (rspI(n1))
 		{
-			report["msg"] = "error, wrong lock argument"
+			rpt["msg"] = "error, wrong lock argument"
 			break
 		}
 		else if (Date.now()-_START > 4500)
 		{
-			report["msg"] = "error, timeout"
+			rpt["msg"] = "error, timeout"
 			break
 		}
 		else if (rspI("breached"))
 		{
-			report["msg"] = "error, target already breached!"
+			rpt["msg"] = "error, target already breached!"
 			break
 		}
 		else
 		{
-			report["msg"] = "error, rsp not recognized"
+			rpt["msg"] = "error, rsp not recognized"
 			break
 		}
 
 	}
-	report["kv"] = kv
-	report["rsp"] = rsp
-	report["times"] = times
-	report["ms"] = Date.now()-_START
-	report["timestamp"] = Date.now()
-	report["caller"] = caller
+	rpt["kv"] = kv
+	rpt["rsp"] = rsp
+	rpt["times"] = times
+	rpt["ms"] = Date.now()-_START
+	rpt["timestamp"] = Date.now()
+	rpt["caller"] = caller
 
-	if (args.report) return report
+	if (args.report) return rpt
 
 	function ezDigit(key){
 		let digit = 0;
