@@ -1,9 +1,9 @@
-function(context, args)
+function(context, args) // confirm:false
 {
 	if (!args){
 		return "This will delete everything that it deems worthless, so there is no risk involved in the use of this script whatsoever.\n`Nname`:`V\"string\"` deletes all items containing the string in its name\nEnjoy!"
 	}
-	var u = #3s.sys.upgrades({full:true}), a=[], k3ys = []
+	var u = #3s.sys.upgrades({full:true}), a=[], deleteNames = [], k3ys = [], k3ys2 = []
 
 	if (args.name)
 	{
@@ -14,6 +14,7 @@ function(context, args)
 				if (!i.loaded)
 				{
 					a.push(i.i)
+					deleteNames.push(i.name+" i:"+i.i)
 				}
 			}
 		}
@@ -25,6 +26,7 @@ function(context, args)
 				if (!i.loaded && !i.name.includes("k3y"))
 				{
 					a.push(i.i)
+					deleteNames.push(i.name+" i:"+i.i)
 				}
 			}
 		}
@@ -32,11 +34,13 @@ function(context, args)
 		{
 			if (i.name.includes("k3y"))
 			{
+				k3ys2.push(`${i.k3y} i:`+i.i)
 				if (!k3ys.includes(i.k3y))
 				{
 					k3ys.push(i.k3y)
-				} else {
+				} else if (/\b(tc2|tvf|xwz|uph|sa2|hc3|5c7|4jitu5|nfi|vth)/.test(i.k3y)){
 					a.push(i.i)
+					deleteNames.push(i.name+" i:"+i.i)
 				}
 			}
 		}
@@ -44,11 +48,12 @@ function(context, args)
 	if (a.length) {
 		if (args.confirm) {
 			#1s.sys.cull({i:a, confirm:true})
-			return {msg:`Deleted items: ${a.join(', ')}`, k3ys:k3ys}
+			return {msg:`Deleted items: ${deleteNames.join(', ')}`, k3ys:k3ys2}
 		} else {
-			return {msg:`confirm:true to delete items: ${a.join(', ')}`, k3ys:k3ys}
+			return "confirm:true to delete the following items:"+deleteNames.join('`V,` ')+"\n\nlist of `Nk3ys` (Rare keys are not deleted):\n"+k3ys2.join("\n")
 		}
 	} else {
-		return {msg:`No worthless items found.`, k3ys:k3ys}
+		return "No worthless items found\n"+deleteNames.join('`V,` ')+"\n\nlist of `Nk3ys`:\n"+k3ys2.join("\n")
 	}
+	
 }

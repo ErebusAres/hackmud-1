@@ -1,7 +1,7 @@
-function(context, args)
+function(context, args) // target:#s.halperyon.public
 {
 	if (!args) {
-		return "This is a `5next gen` script to scrape T1 npc corps for npc locs, target:#s.npc.loc or leave arguments empty to have the script pick a random corp\njr:true to get only _jr_ npc locs\nwlf:true to get only _XXwlf_ locs\nall:true to get all noncorrupt locations";
+		return "This is a `5next gen` script used to scrape T1 npc corps for npc locs, target:#s.npc.loc or leave arguments empty to have the script pick a random corp\njr:true to get only _jr_ npc locs\nwlf:true to get only _XXwlf_ locs\nall:true to get all noncorrupt locations";
 	}
 	//get starting date of script run used to measure its run time
 	let startDate = +new Date();

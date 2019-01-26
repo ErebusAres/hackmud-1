@@ -1,4 +1,4 @@
-function(context, args)
+function(context, args) // confirm:false
 {
 	var caller = context.caller
 	var l = #fs.scripts.lib()

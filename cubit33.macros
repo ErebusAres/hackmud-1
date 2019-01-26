@@ -68,3 +68,5 @@ acct_nt
 acorn.acct_nt_crck{{loc:#s.{0}}}
 u2b
 daisy.t2{{t:#s.{0}}}
+xferupgr
+sys.xfer_upgrade_to{{i:[{0}],to:"{1}"}}
