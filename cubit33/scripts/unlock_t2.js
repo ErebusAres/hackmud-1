@@ -27,7 +27,7 @@ function(context, args)
 	],
 	bal = #ms.accts.balance()
 	args=args||{}
-	if(!lib.is_def(args.target) || !lib.is_def(args.xfer)) {return "Input a target with target:#s.npc.loc\nxfer:\"user\" an alt user of yours to transfer your spare cash to\nreport:true (optional) to receive detailed feedback"}
+	if(!lib.is_def(args.target) || !lib.is_def(args.xfer)) {return "Input a target with target:#s.abandoned_jrttl_info_6js9kq\nxfer:\"user\" an alt user of yours to transfer your spare cash to\nreport:true (optional) to receive detailed feedback"}
 
 	#ms.accts.xfer_gc_to({to:args.xfer,amount:bal})
 	
@@ -435,7 +435,7 @@ function(context, args)
 
 	function tmo(x)
 	{//timeout checker
-		x?0:x=4500
+		x?0:x=3900 //npcs stop paying out after 4s of runtime
 		return Date.now()-_START<x
 	}
 
