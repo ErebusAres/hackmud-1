@@ -48,12 +48,12 @@ function(context, args) // confirm:false
 	if (a.length) {
 		if (args.confirm) {
 			#1s.sys.cull({i:a, confirm:true})
-			return {msg:`Deleted items: ${deleteNames.join(', ')}`, k3ys:k3ys2}
+			return "\nDeleted items:\n"+deleteNames.join('`V,` ')+"\n\nlist of `Nk3ys`. uncommon & unique keys (of which you don't have spares) were not deleted:\n"+k3ys2.join("\n")
 		} else {
-			return "confirm:true to delete the following items:"+deleteNames.join('`V,` ')+"\n\nlist of `Nk3ys` (Rare keys are not deleted):\n"+k3ys2.join("\n")
+			return "\nconfirm:true to delete the following items:\n"+deleteNames.join('`V,` ')+"\n\nlist of `Nk3ys`. uncommon & unique keys (of which you don't have spares) are not deleted:\n"+k3ys2.join("\n")
 		}
 	} else {
-		return "No worthless items found\n"+deleteNames.join('`V,` ')+"\n\nlist of `Nk3ys`:\n"+k3ys2.join("\n")
+		return "\nNo worthless items found\n"+deleteNames.join('`V,` ')+"\n\nlist of `Nk3ys`:\n"+k3ys2.join("\n")
 	}
 	
 }

@@ -1,11 +1,11 @@
-function(context, args) // confirm:false
+function(context, args) // info:true
 {
 	var caller = context.caller
 	var l = #fs.scripts.lib()
-	let infoString = "This is my toolbox, current options:\n\nKey Loader - `Nk3y`:`V\"string\"` - loads or unloads the first available key with that value, if available\n\nMarket Sort - market:true, name:\"string\", key:\"key\" (the referenced key must be numerical, ex. chars), rarity:\\d (rarity must be greater than 1) will return to you a list of those items sorted by the key:value\nTransactions - transactions:true to see a handy display of all your transactions",
+	let infoString = "This is my toolbox, current options:\n\n`AKey Loader` - `Nk3y`:`V\"string\"` - loads or unloads the first available key with that value, if available\ncubit33.toolbox {k3y:\"4jixaw\"}\n\n`AMarket Sort` - market:true, name:\"string\", key:\"key\" (the referenced key must be numerical, ex. chars) - items are Sorted by the key:value\ncubit33.toolbox {market:true, name:\"k3y_v2\", key:\"k3y\"}\n\n`ATransactions` - transactions:true to see a handy display of all your transactions\ncubit33.toolbox {transactions:true,page:1}",
 	error = true
 
-	if (!args)
+	if (args.info || !args)
 	{
 		return infoString
 	}
@@ -22,9 +22,9 @@ function(context, args) // confirm:false
 		if (error) return "`DKey not found`"
 		return "`2"+args.k3y+" found`"
 	}
-	else if (args.market&&args.name&&args.key&&args.rarity>1)
+	else if (args.market&&args.name&&args.key)
 	{
-		let kv = {name:args.name,rarity:args.rarity}
+		let kv = {name:args.name}
 		let items = #fs.market.browse(kv)
 		let temp = []
 		while (items.length)
@@ -42,7 +42,8 @@ function(context, args) // confirm:false
 	}
 	else if (args.transactions)
 	{
-		let txs = #hs.accts.transactions({count:50}), str=""
+		let page = args.page*100-100
+		let txs = #hs.accts.transactions({count:100,start:page}), str=""
 		txs.forEach(x=>
 		{
 			str+=`\n${l.to_game_timestr(x.time)} ${x.recipient==caller?"`N in`":"`Vout`"} ${pad(x.amount,15)} ${x.recipient!=caller?x.recipient:x.sender} \`V${!!x.memo?"MEMO":" "}\``
