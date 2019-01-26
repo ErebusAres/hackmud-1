@@ -1,16 +1,16 @@
 function(C,A){
-    
+   
   //from ♪Leming☼#1700 on discord
   let pw = "password"
   , { p } = A = (A) ? A : {}
   , v = (
   ( _=>( C.caller=="admin_name" ) ? 2 :
-   ( ( p===pw ) ? 1 : 0  )     
-  )() 
+   ( ( p===pw ) ? 1 : 0  )    
+  )()
   )
  , stf = T=>JSON.stringify(T)
 
-// --- //M//A//I//N --- //M//A//I//N// --- //M//A//I//N// --- //M//A//I//N// --- 
+// --- //M//A//I//N --- //M//A//I//N// --- //M//A//I//N// --- //M//A//I//N// ---
  function main ({c='?', q, a ,u}={}){
   let X
      switch (c){
@@ -22,7 +22,7 @@ function(C,A){
       break
       case "dbi" : //Insert
        Object.assign(q, {
-          info : { 
+          info : {
              v ,
              creator : C.caller ,
              script : C.calling_script ,
@@ -39,11 +39,11 @@ function(C,A){
        X = #db.u1(q,u);break
       case "dbr" : // !!!REMOVE!!!
           if ( stf(q)==stf({})&&A.ok===pw ) X = #db.r({})
-        else if ( stf(q)==stf({}) ) X = "This will delete the whole database! Are you sure?"//Sanity Check 
+        else if ( stf(q)==stf({}) ) X = "This will delete the whole database! Are you sure?"//Sanity Check
          else X = #db.r(q)
      }
   return { c, q, u, a, X }
- }    
+ }   
 //---------------------------------------------\\M\\A\\I\\N\\
- return main(A) 
+ return main(A)
 }

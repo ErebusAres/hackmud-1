@@ -5,17 +5,22 @@ function(context, args)
 	}
 	var u = #3s.sys.upgrades({full:true}), a=[], k3ys = []
 
-	if (args.name) {
-		for (let i of u){
-			if(i.name.includes(args.name)){
-				if (!i.loaded){
+	if (args.name)
+	{
+		for (let i of u)
+		{
+			if(i.name.includes(args.name))
+			{
+				if (!i.loaded)
+				{
 					a.push(i.i)
 				}
 			}
 		}
 	} else {
-		for (let i of u){
-			if((i.tier == 1 && i.rarity < 2) || (i.tier == 2 && i.rarity < 2 && !/char_count|script_slot|bot/.test(i.type)))
+		for (let i of u)
+		{
+			if((i.tier == 1 && i.rarity < 2) || (i.tier == 2 && i.rarity < 2))
 			{
 				if (!i.loaded && !i.name.includes("k3y"))
 				{

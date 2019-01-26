@@ -111,7 +111,7 @@ function(context, args)
 			}
 			else if (lk.includes("acct_nt"))
 			{
-				let txs = #hs.accts.transactions({count:25}).map(e => 
+				let txs = #hs.accts.transactions({count:25}).map(e =>
 				{
 					e["time"] = parseInt(lib.to_game_timestr(e.time).replace(".",""));
 					(e.recipient==caller)?null:e["amount"]*=-1
@@ -217,8 +217,8 @@ function(context, args)
 				let az = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), // a to z
 				sq = /\w{3}(?=\n)/.exec(rsp)[0].split("").map(x=>az.indexOf(x)), // sequence
 				nr = [sq[2]-sq[1],sq[1]-sq[0]]
-				kv["CON_SPEC"] = 
-					az[sq[2]+nr[1]]					+ 
+				kv["CON_SPEC"] =
+					az[sq[2]+nr[1]]					+
 					az[sq[2]+nr[1]  +nr[0]] +
 					az[sq[2]+nr[1]*2+nr[0]]
 				rspC()
@@ -233,13 +233,15 @@ function(context, args)
 				kv["sn_w_glock"]=0
 				rspC()
 				for (let i of glock){for (let j in i)
-				{
-					if (rspI(j))
 					{
-						#hs.cubit32.xfer({amount:i[j]})
-						rspC()
+						if (rspI(j))
+						{
+							#hs.cubit32.xfer({amount:i[j]})
+							rspC()
+							if (kv.acct_nt) delete kv.acct_nt
+						}
 					}
-				}}        
+				}
 			}
 			else if (lk.includes("EZ_"))
 			{
@@ -383,6 +385,8 @@ function(context, args)
 	rpt["ms"] = Date.now()-_START
 	rpt["timestamp"] = Date.now()
 	rpt["caller"] = caller
+	rpt["target"] = args.target.name
+	rpt["script"] = "cubit33.unlock_t2"
 
 	if (args.report) return rpt
 

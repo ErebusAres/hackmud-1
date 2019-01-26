@@ -22,7 +22,7 @@ function(context, args)
 		if (error) return "`DKey not found`"
 		return "`2"+args.k3y+" found`"
 	}
-	if (args.market&&args.name&&args.key&&args.rarity>1)
+	else if (args.market&&args.name&&args.key&&args.rarity>1)
 	{
 		let kv = {name:args.name,rarity:args.rarity}
 		let items = #fs.market.browse(kv)
@@ -40,7 +40,7 @@ function(context, args)
 		})
 		return string
 	}
-	if (args.transactions)
+	else if (args.transactions)
 	{
 		let txs = #hs.accts.transactions({count:50}), str=""
 		txs.forEach(x=>
