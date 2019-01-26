@@ -43,10 +43,14 @@ function(context, args)
 	}
 		
 	rspC()
-
 	let lastCycle = 0
 	while (true)
 	{
+		if (typeof response == "undefined")
+		{
+			rpt["msg"] = "error, target not found"
+			break
+		}
 		if (!rsp)
 		{
 			rpt["msg"] = "error, target does not exist"
@@ -238,7 +242,9 @@ function(context, args)
 						{
 							#hs.cubit32.xfer({amount:i[j]})
 							rspC()
-							if (kv.acct_nt) delete kv.acct_nt
+							if (kv.acct_nt) {
+								rpt["acct_nt_1"] = kv.acct_nt
+								delete kv.acct_nt}
 						}
 					}
 				}
