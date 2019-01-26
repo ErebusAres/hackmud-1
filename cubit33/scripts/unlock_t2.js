@@ -44,13 +44,13 @@ function(context, args)
 		
 	rspC()
 	let lastCycle = 0
-	while (true)
+	while (tmo())
 	{
-		if (typeof response == "undefined")
-		{
-			rpt["msg"] = "error, target not found"
-			break
-		}
+		// if (typeof response == "undefined")
+		// {
+		// 	rpt["msg"] = "error, target not found"
+		// 	break
+		// }
 		if (!rsp)
 		{
 			rpt["msg"] = "error, target does not exist"
@@ -168,7 +168,7 @@ function(context, args)
 
 					let midSum = 0; for (let i of txMid) midSum+=i.amount
 					let count = 0, count2 = 0, gsses = [], error=true
-					while (Date.now()-_START<4500)
+					while (tmo())
 					{
 						let sum = midSum, end=false, nNM = nTM.slice(count) //nNM means new not mid
 						if (nNM.length) {sum += nNM.reduce((a,o) => { return a + o.amount },0)}
@@ -242,9 +242,11 @@ function(context, args)
 						{
 							#hs.cubit32.xfer({amount:i[j]})
 							rspC()
-							if (kv.acct_nt) {
+							if (kv.acct_nt != "undefined")
+							{
 								rpt["acct_nt_1"] = kv.acct_nt
-								delete kv.acct_nt}
+								delete kv.acct_nt
+							}
 						}
 					}
 				}
@@ -402,7 +404,7 @@ function(context, args)
 		{
 			digit = 1;
 		}
-		while (true)
+		while (tmo())
 		{
 			kv[key] = digit++
 			digit>9?digit++:null
@@ -423,6 +425,11 @@ function(context, args)
 	function rspI(x)
 	{
 		return rsp.includes(x)
+	}
+
+	function tmo()
+	{//timeout checker
+		return Date.now()-_START<4900
 	}
 
 }
