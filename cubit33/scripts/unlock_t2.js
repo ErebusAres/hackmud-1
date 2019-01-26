@@ -27,7 +27,7 @@ function(context, args)
 	],
 	bal = #ms.accts.balance()
 	args=args||{}
-	if(!l.is_def(args.target) || !l.is_def(args.xfer)) {return "Input a target with target:#s.npc.loc\nxfer:\"user\" an alt user of yours to transfer your spare cash to\nreport:true to receive detailed feedback"}
+	if(!lib.is_def(args.target) || !lib.is_def(args.xfer)) {return "Input a target with target:#s.npc.loc\nxfer:\"user\" an alt user of yours to transfer your spare cash to\nreport:true (optional) to receive detailed feedback"}
 
 	#ms.accts.xfer_gc_to({to:args.xfer,amount:bal})
 	
