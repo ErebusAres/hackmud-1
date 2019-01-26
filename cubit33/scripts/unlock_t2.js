@@ -63,9 +63,9 @@ function(context, args)
 		
 		if (lk && lk.length)
 		{
-			times[lk] = Date.now()-_START-lastCycle
+			times[lk] = tmo()-_START-lastCycle
 		}
-		lastCycle = Date.now()-_START
+		lastCycle = tmo()
 		if (!rspI("ion terminated.") || !rspI("system offline"))
 		{
 			rspC()
@@ -82,7 +82,7 @@ function(context, args)
 				rspC()
 				let last4 = /\b\w+$/.exec(rsp)[0].split(""),
 				gsses = [], gss, error=true // guesses and guess
-				while (Date.now()-_START < 4500)
+				while (tmo())
 				{
 					
 					let last4copy = Array(...last4)
@@ -370,7 +370,7 @@ function(context, args)
 			rpt["msg"] = "error, wrong lock argument"
 			break
 		}
-		else if (Date.now()-_START > 4500)
+		else if (tmo())
 		{
 			rpt["msg"] = "error, timeout"
 			break
@@ -382,6 +382,11 @@ function(context, args)
 		}
 		else
 		{
+			if (!/(total (spent|earned)|What was th)/.test(rsp))
+			{
+				rpt["acct_nt_count"]?rpt.acct_nt_count=1:rpt.acct_nt_count++
+				continue
+			}
 			rpt["msg"] = "error, rsp not recognized"
 			break
 		}
@@ -390,7 +395,7 @@ function(context, args)
 	rpt["kv"] = kv
 	rpt["rsp"] = rsp
 	rpt["times"] = times
-	rpt["ms"] = Date.now()-_START
+	rpt["ms"] = tmo()
 	rpt["timestamp"] = Date.now()
 	rpt["caller"] = caller
 	rpt["target"] = args.target.name
@@ -427,9 +432,10 @@ function(context, args)
 		return rsp.includes(x)
 	}
 
-	function tmo()
+	function tmo(x)
 	{//timeout checker
-		return Date.now()-_START<4900
+		typeof x==undefined?x=4500:0
+		return Date.now()-_START<x
 	}
 
 }

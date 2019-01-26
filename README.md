@@ -21,6 +21,8 @@ beta
 dtr
 lore
 skriipts
+preen
+googl.search
 
 # l0cket answers:
 

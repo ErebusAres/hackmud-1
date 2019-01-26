@@ -112,23 +112,19 @@ function(context, args)
 			temp = temp.join('\n');
 		}
 		if (args.jr) {
-			temp = temp.match(/^.*_jr_.*$/g);
+			temp = temp.match(/.*_jr_.*/g);
 		} else if (args.wlf) {
-			temp = temp.match(/(abandoned|anon(ymous)?|derelict|unidentified|un?known)_..wlf\.(pub_info|[a-z]+)*?_[a-z\d_]{6}/g);
+			temp = temp.match(/.*wlf_.*/g);
 		} else {
-			temp = temp.match(/(aba?ndo?ne?d|anon(ymous)?|derelict|unidentified|un?known)_(jr|dd)[a-z_\d]+\.(pub_info|[a-z]+)*?_[a-z\d_]{6}/g);
+			temp = temp.match(/(aba?ndo?ne?d|anon(ymous)?|derelict|unidentified|un?known)_..[a-z_\d]+\.(pub_info|[a-z]+)*?_[a-z\d_]{6}/g);
 		}
-		//ddttl jrttl jrstg jr jrrvn jrwlf jrwvr ddwvr ddstg ddwlf - these are the possible npcs and their classes
 		if (temp) {
 			for (let i of temp) {
-				if (i.includes("wlf_") || i.includes("_dd") || i.includes("_wvr")) {
-					members.push(i);
-				}
+				members.push(i);
 			}
 		}
 	}
 	
 
 	return members.sort();
-	// return {return:{cmd:commands,pgs:pages,pw:passwords,prj:projects,mbr:members}, milliseconds:time};
 }
