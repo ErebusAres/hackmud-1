@@ -8,7 +8,7 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 	colors = "red,orange,yellow,lime,green,cyan,blue,purple".split(','),
 	n1 = "is not the",
 	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw,9p65cu,j1aa4n".split(','),
-	times = {},
+	calls = {},
 	rpt = {}, //rpt
 	upgrades = #hs.sys.upgrades({full:true}),
 	k3ys = [],
@@ -44,8 +44,8 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 		}
 	}
 		
+	let lastCalls = 0, totalCalls = 0
 	rspC()
-	let lastCycle = 0
 	while (tmo())
 	{
 		// if (typeof response == "undefined")
@@ -65,9 +65,9 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 		
 		if (lk && lk.length)
 		{
-			times[lk] = (Date.now()-_START)-lastCycle
+			calls[lk] = lastCalls
 		}
-		lastCycle = Date.now()-_START
+		totalCalls += lastCalls, lastCalls = 0
 		if (!rspI("ion terminated.") || !rspI("system offline"))
 		{
 			rspC()
@@ -396,13 +396,15 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 	}
 	rpt["kv"] = kv
 	rpt["rsp"] = rsp
-	rpt["times"] = times
+	rpt["calls"] = calls
 	rpt["ms"] = Date.now()-_START
+	rpt["calls"] = totalCalls+lastCalls
 	rpt["timestamp"] = Date.now()
 	rpt["caller"] = caller
 	rpt["target"] = args.target.name
 	rpt["script"] = "cubit33.unlock_t2"
 
+	#db.i(rpt)
 	if (args.report) return rpt
 
 	function ezDigit(key){
@@ -421,13 +423,14 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 			}
 		}
 	}
-
 	function rspC()
 	{
 		lastrsp = rsp
 		rsp = args.target.call(kv)
+		lastCalls++
 		return rsp
 	}
+
 
 	function rspI(x)
 	{
