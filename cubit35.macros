@@ -70,3 +70,5 @@ u2b
 daisy.t2{{t:#s.{0}}}
 xferupgr
 sys.xfer_upgrade_to{{i:[{0}],to:"{1}"}}
+cull
+sys.cull{{i:[{0}],confirm:true}}

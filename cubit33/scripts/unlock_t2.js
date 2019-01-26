@@ -396,12 +396,13 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 	}
 	rpt["kv"] = kv
 	rpt["rsp"] = rsp
-	rpt["calls"] = calls
+	rpt["lock_calls"] = calls
 	rpt["ms"] = Date.now()-_START
 	rpt["calls"] = totalCalls+lastCalls
 	rpt["timestamp"] = Date.now()
 	rpt["caller"] = caller
 	rpt["target"] = args.target.name
+	rpt["xfer"] = args.xfer
 	rpt["script"] = "cubit33.unlock_t2"
 
 	#db.i(rpt)
