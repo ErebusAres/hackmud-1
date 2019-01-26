@@ -8,7 +8,7 @@ function(context, args)
 	ez = ["open","release","unlock"],
 	colors = "red,orange,yellow,lime,green,cyan,blue,purple".split(','),
 	n1 = "is not the",
-	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw,9p65cu".split(','),
+	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw,9p65cu,j1aa4n".split(','),
 	times = {},
 	rpt = {}, //rpt
 	upgrades = #hs.sys.upgrades({full:true}),
@@ -116,11 +116,10 @@ function(context, args)
 					e["time"] = parseInt(lib.to_game_timestr(e.time).replace(".",""));
 					(e.recipient==caller)?null:e["amount"]*=-1
 					return e
-				})
+				}), rgx=/withdrawal|deposit/
 				kv["acct_nt"] = 0
 				rspC()
 				if (!/spent|earned|What was|withdrawal|deposit/.test(rsp))continue
-				let rgx=/withdrawal|deposit/
 				
 				if(rgx.test(rsp))
 				{
