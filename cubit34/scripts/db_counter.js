@@ -13,18 +13,18 @@ function(context, args)
 	{
 		count = {name:"count",count:1}
 		debug = #db.i(count)
-		return {msg:"insert",c:count,dbg:debug}
+		return {msg:"insert",count,debug}
 	}
 
 	if (args.del)
 	{
 		debug = #db.r({name:count.name})
-		return {msg:"delete",c:count,dbg:debug}
+		return {msg:"delete",count,debug}
 	}
 	else
 	{
 		debug = #db.u({name:count.name}, { $inc:{count:1} })
-		return {msg:"update",c:count,dbg:debug}
+		return {msg:"update",count,debug}
 	}
 
 }
