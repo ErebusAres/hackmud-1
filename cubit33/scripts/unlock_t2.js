@@ -434,7 +434,7 @@ function(context, args)
 
 	function tmo(x)
 	{//timeout checker
-		typeof x==undefined?x=4500:0
+		typeof x=="undefined"?x=4500:0
 		return Date.now()-_START<x
 	}
 
