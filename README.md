@@ -84,7 +84,9 @@ sn_w_glock: your acc balance must be this amount
   meaning       42
   Not a monolithic balance.
 
-l0ckbox: To unlock, please load the appropriate k3y: nfijix pmvr1q
+l0ckbox: To unlock, please load the appropriate k3y: 
+t1 keys: tc2, tvf, xwz, uph, sa2, 72u, cmp, i87, eoq, 6hh, 9p6, fr8, pmv, xwz, ell, xfn, sa2, 72u, uph, cmp, sa2, 6hh, xwz, eoq, y11 (from common to rare)
+t2 keys: hc3, 5c7, 4ji, nfi, vth, lq0, voo, nyi, 4ji, j1a, nyi, lq0, d9j, j1a, vth, vzd, cy7, d9j, voo, cy7, vzd, 8iz
 
 magnara:
 this is an anagram lock, the opening message is incorrect anagram solution for: <anagram>

@@ -1,6 +1,5 @@
 function(context, args)
 {
-	if (!args) {return "Input a target with target:#s.npc.loc\nreport:true to receive detailed feedback"}
 	let
 	kv = {},
 	rsp, lastrsp,
@@ -27,8 +26,10 @@ function(context, args)
 		{special:38}
 	],
 	bal = #ms.accts.balance()
-	if (bal>1e6&&!/cubit3[345]/.test(caller)) return "please reduce your balance to less than 1MGC"
-	#ms.accts.xfer_gc_to({to:"cubit32",amount:bal})
+	args=args||{}
+	if(!l.is_def(args.target) || !l.is_def(args.xfer)) {return "Input a target with target:#s.npc.loc\nxfer:user to transfer your spare cash to, or there will be problems solving the glock lock\nreport:true to receive detailed feedback"}
+
+	#ms.accts.xfer_gc_to({to:args.xfer,amount:bal})
 	
 	for (let u of upgrades)
 	{
@@ -63,9 +64,9 @@ function(context, args)
 		
 		if (lk && lk.length)
 		{
-			times[lk] = tmo()-_START-lastCycle
+			times[lk] = (Date.now()-_START)-lastCycle
 		}
-		lastCycle = tmo()
+		lastCycle = Date.now()-_START
 		if (!rspI("ion terminated.") || !rspI("system offline"))
 		{
 			rspC()
@@ -395,7 +396,7 @@ function(context, args)
 	rpt["kv"] = kv
 	rpt["rsp"] = rsp
 	rpt["times"] = times
-	rpt["ms"] = tmo()
+	rpt["ms"] = Date.now()-_START
 	rpt["timestamp"] = Date.now()
 	rpt["caller"] = caller
 	rpt["target"] = args.target.name
@@ -434,7 +435,7 @@ function(context, args)
 
 	function tmo(x)
 	{//timeout checker
-		typeof x=="undefined"?x=4500:0
+		x?0:x=4500
 		return Date.now()-_START<x
 	}
 

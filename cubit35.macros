@@ -62,5 +62,9 @@ sell
 market.sell{{i:{0},count:{1},cost:{2},confirm:true}}
 txs
 cubit33.toolbox{transactions:true}
+magnara
+dictionary.lookup{{letters:"{0}"}}
+acct_nt
+acorn.acct_nt_crck{{loc:#s.{0}}}
 u2b
 daisy.t2{{t:#s.{0}}}

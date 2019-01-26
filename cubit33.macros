@@ -66,3 +66,5 @@ magnara
 dictionary.lookup{{letters:"{0}"}}
 acct_nt
 acorn.acct_nt_crck{{loc:#s.{0}}}
+u2b
+daisy.t2{{t:#s.{0}}}
