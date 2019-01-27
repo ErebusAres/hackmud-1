@@ -7,7 +7,7 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 	ez = ["open","release","unlock"],
 	colors = "red,orange,yellow,lime,green,cyan,blue,purple".split(','),
 	n1 = "is not the",
-	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw,9p65cu,j1aa4n".split(','),
+	l0cket = "cmppiq,sa23uw,tvfkyq,uphlaw,vc2c7q,xwz7ja,i874y3,72umy0,5c7e1r,hc3b69,nfijix,4jitu5,6hh8xw,9p65cu,j1aa4n,voon2h,d9j270,i874y3,lq09tg".split(','),
 	calls = {},
 	rpt = {}, //rpt
 	upgrades = #hs.sys.upgrades({full:true}),
@@ -27,7 +27,7 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 	],
 	bal = #ms.accts.balance()
 	args=args||{}
-	if(args.info || !lib.is_def(args.target)) {return "Input a target with target:#s.abandoned_jrttl_info6js9kq\nxfer:\"user\" an alt user of yours to transfer your spare cash to\nreport:true (optional) to receive detailed feedback\n\nThis script works most of the time (provided you have the keys for l0ckbox) if it doesnt work, run it a few more times and make small transactions inbetween runs."}
+	if(args.info || !lib.is_def(args.target)) {return "Input a target with target:#s.abandoned_jrttl_info6js9kq\nxfer:\"user\" an alt user of yours to transfer your spare cash to\nreport:true (optional) to receive detailed feedback\n\nThis script works most of the time (provided you have the keys for l0ckbox) if it doesnt work, run it a few more times and make small transactions inbetween runs.\n\nmacro:\n/u2 = cubit33.unlock_t2{{target:#s.{0},report:true,xfer:\"user\"}}"}
 	if (!lib.is_def(args.xfer)) return "Please pick an xfer:\"user\" to transfer excess funds to"
 
 	#ms.accts.xfer_gc_to({to:args.xfer,amount:bal})
@@ -48,11 +48,6 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 	rspC()
 	while (tmo())
 	{
-		// if (typeof response == "undefined")
-		// {
-		// 	rpt["msg"] = "error, target not found"
-		// 	break
-		// }
 		if (!rsp)
 		{
 			rpt["msg"] = "error, target does not exist"
@@ -343,7 +338,8 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 		}
 		else if (rspI("To unlock, please load the appropriate k3y:"))
 		{
-			let reqK3y = /(...)...$/.exec(rsp)[1]
+			let reqK3y = /(......)$/.exec(rsp)[1]
+			rpt["l0ckbox"] = reqK3y
 			let error = true
 			for (let i of k3ys)
 			{
@@ -357,7 +353,7 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 			}
 			if (error)
 			{
-				rpt["msg"] = "error, l0ckbox requests absent key:"+reqK3y+"***"
+				rpt["msg"] = "error, l0ckbox requests absent key:"+reqK3y
 				break
 			}
 		}

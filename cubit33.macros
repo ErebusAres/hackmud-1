@@ -72,3 +72,11 @@ xferupgr
 sys.xfer_upgrade_to{{i:[{0}],to:"{1}"}}
 cull
 sys.cull{{i:[{0}],confirm:true}}
+u2c
+cubit33.unlock_t2b{{target:#s.{0},report:true,xfer:"cubit32"}}
+upgrxfer
+sys.xfer_upgrade_to{{i:[{0}],to:"{1}"}
+locks
+sudo.ldd {{ target: #s.{0}, so: #s.ldd.so }}
+safe
+cubit33.toolbox {{ safescript:#s.{0} }}

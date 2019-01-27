@@ -2,7 +2,7 @@ function(context, args) // info:true
 {
 	var caller = context.caller
 	var l = #fs.scripts.lib()
-	let infoString = "This is my toolbox, current options:\n\n`AKey Loader` - `Nk3y`:`V\"string\"` - loads or unloads the first available key with that value, if available\ncubit33.toolbox {k3y:\"4jixaw\"}\n\n`AMarket Sort` - market:true, name:\"string\", key:\"key\" (the referenced key must be numerical, ex. chars) - items are Sorted by the key:value\ncubit33.toolbox {market:true, name:\"k3y_v2\", key:\"k3y\"}\n\n`ATransactions` - transactions:true to see a handy display of all your transactions\ncubit33.toolbox {transactions:true,page:1}",
+	let infoString = "This is my toolbox, current options:\n\n`AKey Loader` - `Nk3y`:`V\"string\"` - loads or unloads the first available key with that value, if available\ncubit33.toolbox {k3y:\"4jixaw\"}\n\n`AMarket Sort` - market:true, name:\"string\", key:\"key\" (the referenced key must be numerical, ex. chars) - items are Sorted by the key:value\ncubit33.toolbox {market:true, name:\"k3y_v2\", key:\"k3y\"}\n\n`ATransactions` - transactions:true to see a handy display of all your transactions\ncubit33.toolbox {transactions:true,page:1}\n\nSafescript - safescript:#s.user.script to check a user script and run it if it is fullsec. Include safescript_level:3 to run high sec scripts. args:[argument:value,argument2:\"string\"] to pass along arguments for the script (no spaces)\nmacro:\n/safe = cubit33.toolbox {{ safescript:#s.{0} }}",
 	error = true
 
 	if (args.info || !args)
@@ -50,12 +50,38 @@ function(context, args) // info:true
 		})
 		return str
 
-		function pad(num, size)
-		{
-			var s = num+"";
-			while (s.length < size) s = " " + s;
-			return s;
-		}
 	}
+	else if (args.testscript && caller == "cubit33")
+	{
+		let stats = {runs:0,calls:0,kv:[]}
+		let target = {call:x=>#fs.dtr.t1_lock_sim(x),name:"dtr.t1_lock_sim"}
+		while (tmo()) // tmo = timeout, < 4s runtime
+		{
+			let locksim = #fs.dtr.t1_lock_sim({locks:["EZ_21","EZ_40","EZ_35"]})
+			let temp = #ms.cubit33.unlock_t2b({target:target,report:true,xfer:"cubit32"})
+			stats.runs++
+			stats.calls+= temp.calls
+		}
+		return stats // return a report of the perforamnce of my script
+	}
+	else if (args.safescript)
+	{
+		args.tier?0:args.tier=3
+		let temp = #fs.scripts.get_level({name:args.safescript.name}) 
+		if (temp < args.tier) {return `script sec level too low: `+l.get_security_level_name(temp)} else {return args.safescript.call()}
+	}
+
+	function pad(num, size)
+	{
+		var s = num+"";
+		while (s.length < size) s = " " + s;
+		return s;
+	}
+	function tmo(x)
+	{//timeout checker
+		x?0:x=3900 //npcs stop paying out after 4s of runtime
+		return Date.now()-_START<x
+	}
+
 	return infoString
 }

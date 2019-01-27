@@ -70,6 +70,7 @@ CON_SPEC: tests you based on our class
   1.  ±1
   2.  ±2
   3.  ±1±3±1
+con spec scriptor request: (for now) #s.matr1x.cs
 
 sn_w_glock: your acc balance must be this amount
   ??????        3006,38,443 1963 77? 7007?
