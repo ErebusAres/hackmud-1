@@ -80,3 +80,5 @@ locks
 sudo.ldd {{ target: #s.{0}, so: #s.ldd.so }}
 safe
 cubit33.toolbox {{ safescript:#s.{0} }}
+decor
+cubit33.decorruptor {{ target:#s.{0}, args:"{1}" }}

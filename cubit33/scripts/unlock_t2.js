@@ -27,8 +27,12 @@ function(context, args) //info:false,target:#s.unknown_jrttl_820zd5.entry_97kjq3
 	],
 	bal = #ms.accts.balance()
 	args=args||{}
-	if(args.info || !lib.is_def(args.target)) {return "Input a target with target:#s.abandoned_jrttl_info6js9kq\nxfer:\"user\" an alt user of yours to transfer your spare cash to\nreport:true (optional) to receive detailed feedback\n\nThis script works most of the time (provided you have the keys for l0ckbox) if it doesnt work, run it a few more times and make small transactions inbetween runs.\n\nmacro:\n/u2 = cubit33.unlock_t2{{target:#s.{0},report:true,xfer:\"user\"}}"}
+	if(args.info || !lib.is_def(args.target)) {return "`Donly unlocks CON_SPEC with WEAVER class users`\n\nInput a target with target:#s.abandoned_jrttl_info6js9kq\nxfer:\"user\" an alt user of yours to transfer your spare cash to\nreport:true (optional) to receive detailed feedback\n\nThis script works most of the time (provided you have the keys for l0ckbox) if it doesnt work, run it a few more times and make small transactions inbetween runs.\n\nmacro:\n/u2 = cubit33.unlock_t2{{target:#s.{0},report:true,xfer:\"youruserhere\"}}"}
 	if (!lib.is_def(args.xfer)) return "Please pick an xfer:\"user\" to transfer excess funds to"
+	if (/\bcubit3[2-5]\b/.test(args.target.name))
+	{
+		return "you're not allowed to target the script owner, silly"
+	}
 
 	#ms.accts.xfer_gc_to({to:args.xfer,amount:bal})
 	

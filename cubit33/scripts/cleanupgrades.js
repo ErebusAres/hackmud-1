@@ -21,7 +21,7 @@ function(context, args) // confirm:false
 	} else {
 		for (let i of u)
 		{
-			if((i.tier == 1 && i.rarity < 2) || (i.tier == 2 && i.rarity < 2))
+			if((i.tier == 1 && i.rarity < 2) || (i.tier == 2 && i.rarity < 2 && i.name != "char_count_v2" && i.name != "script_slot_v2") || i.rarity == 0)
 			{
 				if (!i.loaded && !i.name.includes("k3y"))
 				{

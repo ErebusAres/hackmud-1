@@ -80,3 +80,5 @@ locks
 sudo.ldd {{ target: #s.{0}, so: #s.ldd.so }}
 safe
 cubit33.toolbox {{ safescript:#s.{0} }}
+playerlocs
+free.locs
